@@ -2,8 +2,9 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)](https://python.org)
 
-GUI приложение для преобразования аудио/видео в текст с помощью OpenAI Whisper.
+Минималистичное oldschool GUI приложение для преобразования аудио/видео в текст с помощью OpenAI Whisper.
 
+[screenshot](pictures/screenshot.png)
 
 ## **1. Установка Python**
 ### Для Windows:
@@ -26,13 +27,13 @@ choco install python --version=3.12.4
 ### Для Linux (Ubuntu/Debian):
 ```bash
 sudo apt update
-sudo apt install python3.11 python3.11-venv
+sudo apt install python3.12.4 python3.12.4-venv
 ```
 
 ### Для macOS:
 1. Установите через [Homebrew](https://brew.sh/):
 ```bash
-brew install python@3.11
+brew install python@3.12.4
 ```
 
 ---
@@ -44,13 +45,17 @@ brew install python@3.11
 ```bash
 python -m ensurepip --upgrade
 ```
+3. Склонируйте репозиторий
+```bash
+git clone git@github.com:UmkaBearpaw/swip.git
+```
 
-3. Установите основные зависимости:
+4. Установите основные зависимости:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Установите PyTorch (выберите вариант для вашего железа):
+5. Установите PyTorch (выберите вариант для вашего железа):
 - **Для CPU**:
   ```bash
   pip install torch==2.2.1
@@ -82,17 +87,11 @@ brew install ffmpeg
 
 ---
 
-## **4. Подготовка проекта**
-1. Скопируйте [код приложения](https://gist.github.com/your-gist-link) в файл `app.py`.
-2. Сохраните его в удобную папку (например, `C:\whisper_app`).
-
----
-
-## **5. Запуск приложения**
-1. Откройте терминал в папке с `app.py`.
+## **4. Запуск приложения**
+1. Откройте терминал в папке с `swip.py`.
 2. Выполните команду:
 ```bash
-python app.py
+python swip.py
 ```
 
 ---
@@ -114,12 +113,6 @@ python -m venv venv
 source venv/bin/activate  # Linux/macOS
 venv\Scripts\activate     # Windows
 pip install -r requirements.txt
-```
-
-### Пример файла `requirements.txt`:
-```
-openai-whisper==20231117
-torch==2.2.1
 ```
 
 ---

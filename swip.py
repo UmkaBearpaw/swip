@@ -22,7 +22,7 @@ class RedirectStdout:
 class WhisperApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Whisper Transcription + AutoSave")
+        self.root.title("SWIP (Simple Whisper Interface Panel)")
 
         # Проверка доступности CUDA
         self.cuda_available = torch.cuda.is_available()
@@ -50,15 +50,32 @@ class WhisperApp:
         self.btn_file.pack(side=tk.LEFT, padx=5)
         
         # Выбор модели
+        model_frame = ttk.Frame(control_frame)
+        model_frame.pack(side=tk.LEFT, padx=10)
+        ttk.Label(model_frame, text="Модель:").pack(side=tk.LEFT)
         self.model_var = tk.StringVar(value="turbo")
         self.model_combo = ttk.Combobox(
-            control_frame,
+            model_frame,
             textvariable=self.model_var,
             values=["tiny", "base", "small", "medium", "large", "small", "turbo"],
             state="readonly",
             width=10
         )
         self.model_combo.pack(side=tk.LEFT, padx=5)
+
+        # Выбор языка
+        lang_frame = ttk.Frame(control_frame)
+        lang_frame.pack(side=tk.LEFT, padx=10)
+        ttk.Label(lang_frame, text="Язык:").pack(side=tk.LEFT)
+        self.language = tk.StringVar(value="None")
+        self.lang_combo = ttk.Combobox(
+            lang_frame,
+            textvariable=self.language,
+            values=["None","Belarusian","Chinese","Danish","Dutch","English","French","German","Greek","Italian","Japanese","Latin","Russian","Serbian","Spanish","Swedish"],
+            state="readonly",
+            width=10
+        )
+        self.lang_combo.pack(side=tk.LEFT, padx=5)
         
         # Настройки сохранения
         save_frame = ttk.Frame(control_frame)
@@ -119,11 +136,11 @@ class WhisperApp:
             self.file_path = file_path
             self.btn_start.config(state=tk.NORMAL)
             self.output_area.delete(1.0, tk.END)
-            self.print_output(f"Выбран файл: {file_path}",tag="system")
+            self.system_queue.put(f"Выбран файл: {file_path}")
             
     def start_processing(self):
         self.btn_start.config(state=tk.DISABLED)
-        self.print_output("\nНачата обработка...",tag="system")
+        self.system_queue.put(f"Начата обработка...")
         
         threading.Thread(
             target=self.process_file,
@@ -146,6 +163,7 @@ class WhisperApp:
                 compression_ratio_threshold=2.4,
                 logprob_threshold=-1.0,
                 no_speech_threshold=0.5,
+                language=self.language.get()
             )
 
             # Автосохранение результатов
