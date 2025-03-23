@@ -4,7 +4,7 @@
 
 Минималистичное oldschool GUI приложение для преобразования аудио/видео в текст с помощью OpenAI Whisper.
 
-[screenshot](pictures/screenshot.png)
+[![Screenshot](/pictures/screenshot.png)
 
 ## **1. Установка Python**
 ### Для Windows:
