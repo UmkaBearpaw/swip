@@ -173,15 +173,26 @@ class WhisperApp:
         except Exception as e:
             # Обработка ошибок CUDA
             if "CUDA" in str(e):
+                torch.cuda.empty_cache()
                 self.root.after(0, lambda: self.print_output(
                     "\nОшибка CUDA: Переключаюсь на CPU. Убедитесь, что:\n"
                     "1. У вас NVIDIA GPU\n"
                     "2. Установлены драйверы CUDA 11.8+\n"
-                    "3. PyTorch собран с поддержкой CUDA",
+                    "3. PyTorch собран с поддержкой CUDA\n"
+                    "4. Выбрана правильная модель, соответствующая объёму VRAM",
                 tag="system"))
+                # fallback to CPU device
                 device = "cpu"
-                model = whisper.load_model(model_size, device=device)
-                result = model.transcribe(file_path, verbose=True)
+                model = whisper.load_model(model_size, device=device, in_memory=True)
+                result = model.transcribe(file_path, 
+                    verbose=True,
+                    fp16=False,
+                    temperature=(0.0, 0.2, 0.4, 0.6, 0.8, 1.0),
+                    compression_ratio_threshold=2.4,
+                    logprob_threshold=-1.0,
+                    no_speech_threshold=0.5,
+                    language=self.language.get()
+                    )
 
             self.root.after(0, lambda: showerror("Ошибка", str(e)))
         finally:
