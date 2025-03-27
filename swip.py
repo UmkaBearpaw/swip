@@ -57,7 +57,7 @@ class WhisperApp:
         self.model_combo = ttk.Combobox(
             model_frame,
             textvariable=self.model_var,
-            values=["tiny", "base", "small", "medium", "large", "small", "turbo"],
+            values=["tiny", "base", "small", "medium", "large", "turbo"],
             state="readonly",
             width=10
         )
